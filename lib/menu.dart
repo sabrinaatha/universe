@@ -4,9 +4,9 @@ class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
 
   final List<ShopItem> items = [
-    ShopItem("Lihat Item", Icons.checklist),
-    ShopItem("Tambah Item", Icons.add_shopping_cart),
-    ShopItem("Logout", Icons.logout),
+    ShopItem("Lihat Item", Icons.checklist, Colors.amberAccent.shade100),
+    ShopItem("Tambah Item", Icons.add_shopping_cart, Colors.teal.shade100),
+    ShopItem("Logout", Icons.logout, Colors.pink.shade100),
   ];
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -70,8 +70,9 @@ class MyHomePage extends StatelessWidget {
 class ShopItem {
   final String name;
   final IconData icon;
+  final Color buttonColor;
 
-  ShopItem(this.name, this.icon);
+  ShopItem(this.name, this.icon, this.buttonColor);
 }
 
 class ShopCard extends StatelessWidget {
@@ -82,7 +83,7 @@ class ShopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.blue.shade100,
+      color: item.buttonColor,
       child: InkWell(
         // Area responsive terhadap sentuhan
         onTap: () {
@@ -101,14 +102,14 @@ class ShopCard extends StatelessWidget {
               children: [
                 Icon(
                   item.icon,
-                  color: Colors.white,
+                  color: Colors.black,
                   size: 30.0,
                 ),
                 const Padding(padding: EdgeInsets.all(3)),
                 Text(
                   item.name,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.black),
                 ),
               ],
             ),
