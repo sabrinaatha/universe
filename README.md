@@ -166,7 +166,6 @@ Kelas   : PBP A
     - Pisahkan kode ke dalam lapisan yang sesuai dengan konsep Clean Architecture.
     - Gunakan dependency injection untuk menyediakan implementasi yang diperlukan untuk setiap lapisan.
     - Pastikan bahwa setiap lapisan hanya bergantung pada lapisan yang berada di bawahnya (aturan arah tergantung).
-
 Dengan menerapkan Clean Architecture, kita dapat memisahkan tanggung jawab dan ketergantungan antara lapisan-lapisan aplikasi. Hal ini memungkinkan pengujian yang lebih mudah, perubahan yang lebih fleksibel, dan pemeliharaan kode yang lebih baik. Selain itu, penerapan Clean Architecture juga dapat mempermudah kolaborasi antara tim pengembang dan memungkinkan penggunaan ulang kode yang lebih efisien.
 
 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial)
