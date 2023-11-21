@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:universe/screens/list_product.dart';
 import 'package:universe/screens/menu.dart';
 import 'package:universe/screens/shoplist_form.dart';
-import 'package:universe/product_list_page.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -18,7 +18,7 @@ class LeftDrawer extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Shopping List',
+                  'Universe',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -28,7 +28,7 @@ class LeftDrawer extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(10)),
                 Text(
-                  "Catat seluruh keperluan belanjamu di sini!",
+                  "Catat seluruh bukumu di sini!",
                   style: TextStyle(
                     fontSize: 15.0, // Ukuran font 15
                     color: Colors.white, // Warna putih
@@ -64,15 +64,14 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.checklist),
-            title: const Text('Lihat Item'),
-            // Bagian redirection ke ShopFormPage
+            leading: const Icon(Icons.shopping_basket),
+            title: const Text('Daftar Item'),
             onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProductListPage(),
-                  ));
+              // Route menu ke halaman produk
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProductPage()),
+              );
             },
           ),
         ],

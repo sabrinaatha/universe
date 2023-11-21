@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:universe/widgets/left_drawer.dart';
-import 'package:universe/product_model.dart';
+import 'dart:convert';
 
-List<Product> products = [];
+import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:universe/screens/menu.dart';
+import 'package:universe/widgets/left_drawer.dart';
 
 class ShopFormPage extends StatefulWidget {
   const ShopFormPage({super.key});
@@ -14,16 +16,17 @@ class ShopFormPage extends StatefulWidget {
 class _ShopFormPageState extends State<ShopFormPage> {
   final _formKey = GlobalKey<FormState>();
   String _name = "";
-  int _price = 0;
+  int _amount = 0;
   String _description = "";
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Form Tambah Produk',
+            'Form Tambah Item',
           ),
         ),
         backgroundColor: Colors.blueGrey,
@@ -62,23 +65,23 @@ class _ShopFormPageState extends State<ShopFormPage> {
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
                 decoration: InputDecoration(
-                  hintText: "Harga",
-                  labelText: "Harga",
+                  hintText: "Jumlah",
+                  labelText: "Jumlah",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
                 onChanged: (String? value) {
                   setState(() {
-                    _price = int.parse(value!);
+                    _amount = int.parse(value!);
                   });
                 },
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return "Harga tidak boleh kosong!";
+                    return "Jumlah barang tidak boleh kosong!";
                   }
                   if (int.tryParse(value) == null) {
-                    return "Harga harus berupa angka!";
+                    return "Jumlah barang harus berupa angka!";
                   }
                   return null;
                 },
@@ -115,45 +118,35 @@ class _ShopFormPageState extends State<ShopFormPage> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Product newProduct = Product(
-                        name: _name,
-                        price: _price,
-                        description: _description,
-                      );
-
-                      // Add the newProduct to the products list
-                      products.add(newProduct);
-
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Produk berhasil tersimpan'),
-                            content: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Nama: $_name'),
-                                  Text('Harga: $_price'),
-                                  Text('Deskripsi: $_description'),
-                                ],
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      // Kirim ke Django dan tunggu respons
+                      // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                      final response = await request.postJson(
+                          "http://127.0.0.1:8000/create-flutter/",
+                          jsonEncode(<String, String>{
+                            'name': _name,
+                            'amount': _amount.toString(),
+                            'description': _description,
+                            // TODO: Sesuaikan field data sesuai dengan aplikasimu
+                          }));
+                      if (response['status'] == 'success') {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Produk baru berhasil disimpan!"),
+                        ));
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyHomePage()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content:
+                              Text("Terdapat kesalahan, silakan coba lagi."),
+                        ));
+                      }
                     }
-                    // _formKey.currentState!.reset();
                   },
                   child: const Text(
                     "Save",
